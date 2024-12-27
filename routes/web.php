@@ -7,9 +7,14 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+use Illuminate\Support\Facades\Auth;
+
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    $user = Auth::user(); // Use the Auth facade explicitly
+    return view('dashboard', ['user' => $user]);
+})->middleware(['auth'])->name('dashboard');
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
