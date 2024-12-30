@@ -1,6 +1,7 @@
 <x-app-layout>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight" style="font-size: 2rem; color: #4A5568; padding: 10px;">
+        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
@@ -16,59 +17,56 @@
                     <div class="w-1/4 pr-4">
                         <ul style="list-style-type: none; padding-left: 0;">
                             <li style="margin: 10px 0;">
-                                <a href="{{ route('admin.manage-users') }}" 
-                                   class="admin-link {{ request()->routeIs('admin.manage-users') ? 'text-blue-600' : 'text-gray-600' }}"
-                                   style="font-size: 1.1rem; text-decoration: none;">
-                                    Manage Users
-                                </a>
+                                <a href="#" class="admin-link" data-target="manage-users">Manage Users</a>
                             </li>
                             <li style="margin: 10px 0;">
-                                <a href="{{ route('admin.view-reports') }}" 
-                                   class="admin-link {{ request()->routeIs('admin.view-reports') ? 'text-blue-600' : 'text-gray-600' }}"
-                                   style="font-size: 1.1rem; text-decoration: none;">
-                                    View Reports
-                                </a>
+                                <a href="#" class="admin-link" data-target="view-reports">View Reports</a>
                             </li>
                             <li style="margin: 10px 0;">
-                                <a href="{{ route('admin.settings') }}" 
-                                   class="admin-link {{ request()->routeIs('admin.settings') ? 'text-blue-600' : 'text-gray-600' }}"
-                                   style="font-size: 1.1rem; text-decoration: none;">
-                                    Admin Settings
-                                </a>
+                                <a href="#" class="admin-link" data-target="settings">Admin Settings</a>
                             </li>
                         </ul>
                     </div>
 
                     <!-- Main Content Area -->
-                    <div class="w-3/4">
-                        @if(request()->routeIs('admin.manage-users'))
-                            @include('admin.manage-users')
-                        @elseif(request()->routeIs('admin.view-reports'))
-                            @include('admin.view-reports')
-                        @elseif(request()->routeIs('admin.settings'))
-                            @include('admin.settings')
-                        @else
-                            <!-- Default Admin Dashboard Content -->
-                            <div class="bg-white p-6 rounded-lg shadow-md">
-                                <h3 class="text-xl mb-4">Quick Statistics</h3>
-                                <div class="grid grid-cols-3 gap-4">
-                                    <div class="p-4 bg-blue-100 rounded">
-                                        <p class="text-lg">Total Users</p>
-                                        <p class="text-2xl font-bold">{{ \App\Models\User::count() }}</p>
-                                    </div>
-                                    <!-- Add more statistics as needed -->
-                                </div>
-                            </div>
-                        @endif
+                    <div class="w-3/4" id="admin-content">
+                        <!-- Default content or loading spinner -->
+                        <div>Loading...</div>
                     </div>
                 </div>
             </div>
-        @elseif ($user->role === 'employee')
-            <!-- Your existing employee panel code -->
-        @elseif ($user->role === 'client')
-            <!-- Your existing client panel code -->
         @else
             <p style="color: #E53E3E; font-size: 1.1rem;">Role not recognized.</p>
         @endif
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.admin-link');
+            const contentDiv = document.getElementById('admin-content');
+
+            // Load default content
+            loadContent('manage-users');
+
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = this.getAttribute('data-target');
+                    loadContent(target);
+                });
+            });
+
+            function loadContent(target) {
+                fetch(`/admin/${target}`)
+                    .then(response => response.text())
+                    .then(html => {
+                        contentDiv.innerHTML = html;
+                    })
+                    .catch(error => {
+                        console.error('Error loading content:', error);
+                        contentDiv.innerHTML = '<p>Error loading content.</p>';
+                    });
+            }
+        });
+    </script>
 </x-app-layout>
