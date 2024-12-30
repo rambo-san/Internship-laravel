@@ -6,10 +6,10 @@
         </h2>
     </x-slot>
 
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-md text-gray-100">
         <h3 class="text-xl mb-4">User Reports</h3>
         
-        <div class="grid grid-cols-3 gap-4 mb-4">
+        <div class="grid grid-cols-3 gap-4 mb-4 text-gray-800">
             <div class="p-4 bg-blue-100 rounded">
                 <p class="text-lg">Total Users</p>
                 <p class="text-2xl font-bold">{{ $userStats['total_users'] }}</p>

@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="bg-white p-6 rounded-lg shadow-md">
+    <div class="bg-gray-800 p-6 rounded-lg shadow-md text-gray-100">
         <h3 class="text-xl mb-4">Admin Settings</h3>
     
         @if (session('success'))

@@ -1,29 +1,31 @@
 <x-app-layout>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
+        <h2 class="font-semibold text-xl text-gray-200 leading-tight">
             {{ __('Dashboard') }}
         </h2>
     </x-slot>
 
-    <div style="background-color: #f9fafb; padding: 20px; border-radius: 8px;">
-        <p style="font-size: 1.2rem; color: #555;">Welcome, <strong>{{ $user->name }}</strong></p>
+    <div class="bg-gray-900 p-6 rounded-lg">
+        <p class="text-gray-300 text-lg">
+            Welcome, <strong class="text-blue-400">{{ $user->name }}</strong>
+        </p>
 
         @if ($user->role === 'admin')
-            <div class="admin-panel">
-                <h2 style="font-size: 2rem; color: #4A90E2;">Admin Panel</h2>
+            <div class="admin-panel mt-4">
+                <h2 class="text-2xl text-blue-400">Admin Panel</h2>
                 <div class="flex">
                     <!-- Sidebar Navigation -->
-                    <div class="w-1/4 pr-4">
-                        <ul style="list-style-type: none; padding-left: 0;">
-                            <li style="margin: 10px 0;">
-                                <a href="#" class="admin-link" data-target="manage-users">Manage Users</a>
+                    <div class="w-1/4 pr-4 bg-gray-800 rounded-lg p-4">
+                        <ul class="list-none pl-0">
+                            <li class="my-2">
+                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" data-target="manage-users">Manage Users</a>
                             </li>
-                            <li style="margin: 10px 0;">
-                                <a href="#" class="admin-link" data-target="view-reports">View Reports</a>
+                            <li class="my-2">
+                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" data-target="view-reports">View Reports</a>
                             </li>
-                            <li style="margin: 10px 0;">
-                                <a href="#" class="admin-link" data-target="settings">Admin Settings</a>
+                            <li class="my-2">
+                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" data-target="settings">Admin Settings</a>
                             </li>
                         </ul>
                     </div>
@@ -31,12 +33,12 @@
                     <!-- Main Content Area -->
                     <div class="w-3/4" id="admin-content">
                         <!-- Default content or loading spinner -->
-                        <div>Loading...</div>
+                        <div class="text-gray-300">Loading...</div>
                     </div>
                 </div>
             </div>
         @else
-            <p style="color: #E53E3E; font-size: 1.1rem;">Role not recognized.</p>
+            <p class="text-red-400 text-lg">Role not recognized.</p>
         @endif
     </div>
 
@@ -64,7 +66,7 @@
                     })
                     .catch(error => {
                         console.error('Error loading content:', error);
-                        contentDiv.innerHTML = '<p>Error loading content.</p>';
+                        contentDiv.innerHTML = '<p class="text-red-400">Error loading content.</p>';
                     });
             }
         });
