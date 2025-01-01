@@ -4,8 +4,13 @@
         <h2 class="font-semibold text-xl text-gray-200 leading-tight">
             {{ __('Dashboard') }}
         </h2>
+        
     </x-slot>
-
+    @if (session('success'))
+    <div class="bg-green-100 border border-green-400 text-green-700 p-2 mb-4 rounded">
+        {{ session('success') }}
+    </div>
+@endif
     <div class="bg-gray-900 p-6 rounded-lg">
         <p class="text-gray-300 text-lg">
             Welcome, <strong class="text-blue-400">{{ $user->name }}</strong>
@@ -19,13 +24,13 @@
                     <div class="w-1/4 pr-4 bg-gray-800 rounded-lg p-4">
                         <ul class="list-none pl-0">
                             <li class="my-2">
-                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" data-target="manage-users">Manage Users</a>
+                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" aria-label="Manage Users" data-target="manage-users">Manage Users</a>
                             </li>
                             <li class="my-2">
-                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" data-target="view-reports">View Reports</a>
+                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" aria-label="View Reports" data-target="view-reports">View Reports</a>
                             </li>
                             <li class="my-2">
-                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" data-target="settings">Admin Settings</a>
+                                <a href="#" class="admin-link text-blue-300 hover:text-blue-400" aria-label="Admin Settings" data-target="settings">Admin Settings</a>
                             </li>
                         </ul>
                     </div>
@@ -60,15 +65,56 @@
 
             function loadContent(target) {
                 fetch(`/admin/${target}`)
-                    .then(response => response.text())
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.text();
+                    })
                     .then(html => {
                         contentDiv.innerHTML = html;
                     })
                     .catch(error => {
                         console.error('Error loading content:', error);
-                        contentDiv.innerHTML = '<p class="text-red-400">Error loading content.</p>';
+                        contentDiv.innerHTML = '<p class="text-red-400">Error loading content. Please try again later.</p>';
                     });
             }
+
+            window.openModal = function() {
+                document.getElementById('userModal').classList.remove('hidden');
+                clearForm();
+            };
+
+            window.closeModal = function() {
+                document.getElementById('userModal').classList.add('hidden');
+            };
+
+            window.clearForm = function() {
+                document.getElementById('userForm').reset();
+                document.getElementById('user_id').value = '';
+                document.getElementById('userModalLabel').innerText = 'Create User';
+                const input = document.querySelector('input[name="_method"]');
+                if (input) input.remove(); // Remove method spoofing input if exists
+            };
+
+            window.editUser = function(user) {
+            document.getElementById('user_id').value = user.id;
+            document.getElementById('name').value = user.name;
+            document.getElementById('email').value = user.email;
+            document.getElementById('role').value = user.role;
+            document.getElementById('userModalLabel').innerText = 'Edit User';
+            document.getElementById('userForm').action = '/admin/manage-users/' + user.id; // Set form action for editing
+            document.getElementById('userForm').method = 'POST'; // Set method for editing
+
+            // Add method spoofing for PATCH
+            const input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = '_method';
+            input.value = 'PATCH';
+            document.getElementById('userForm').appendChild(input);
+
+            openModal(); // Open the modal
+        };
         });
     </script>
 </x-app-layout>

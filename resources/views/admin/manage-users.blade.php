@@ -65,13 +65,13 @@
             </div>
 
             <div class="mb-4">
-                <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
-                <input type="password" name="password" id="password" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
+                <label for="password" class="block text-sm font-medium text-gray-300">Password (Leave blank to keep current)</label>
+                <input type="password" name="password" id="password" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md">
             </div>
 
             <div class="mb-4">
                 <label for="password_confirmation" class="block text-sm font-medium text-gray-300">Confirm Password</label>
-                <input type="password" name="password_confirmation" id="password_confirmation" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
+                <input type="password" name="password_confirmation" id="password_confirmation" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md">
             </div>
 
             <div class="mb-4">
@@ -85,46 +85,34 @@
 
             <div class="flex justify-end">
                 <button type="button" class="bg-gray-700 text-gray-300 px-4 py-2 rounded mr-2" onclick="closeModal()">Cancel</button>
-                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Create User</button>
+                <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">Save Changes</button>
             </div>
         </form>
     </div>
 </div>
-
 <script>
-    function openModal() {
-        document.getElementById('userModal').classList.remove('hidden');
-        clearForm();
-    }
+    window.editUser = function(user) {
+    // Populate the modal fields with the selected user's data
+    document.getElementById('user_id').value = user.id; // Set the hidden user ID
+    document.getElementById('name').value = user.name; // Set the name
+    document.getElementById('email').value = user.email; // Set the email
+    document.getElementById('role').value = user.role; // Set the role
+    document.getElementById('userModalLabel').innerText = 'Edit User'; // Update modal title
 
-    function closeModal() {
-        document.getElementById('userModal').classList.add('hidden');
-    }
+    // Update the form action to point to the update route
+    document.getElementById('userForm').action = `/admin/manage-users/${user.id}`; // Set form action for editing
+    document.getElementById('userForm').method = 'POST'; // Ensure method is POST
 
-    function clearForm() {
-        document.getElementById('userForm').reset();
-        document.getElementById('user_id').value = '';
-        document.getElementById('userModalLabel').innerText = 'Create User';
-        const input = document.querySelector('input[name="_method"]');
-        if (input) input.remove(); // Remove method spoofing input if exists
-    }
-
-    function editUser(user) {
-        document.getElementById('user_id').value = user.id;
-        document.getElementById('name').value = user.name;
-        document.getElementById('email').value = user.email;
-        document.getElementById('role').value = user.role;
-        document.getElementById('userModalLabel').innerText = 'Edit User';
-        document.getElementById('userForm').action = '/admin/manage-users/' + user.id; // Update form action for editing
-        document.getElementById('userForm').method = 'POST'; // Set method to POST for editing
-
-        // Add method spoofing for PATCH
-        const input = document.createElement('input');
+    // Add method spoofing for PATCH
+    let input = document.querySelector('input[name="_method"]');
+    if (!input) {
+        input = document.createElement('input');
         input.type = 'hidden';
         input.name = '_method';
         input.value = 'PATCH';
         document.getElementById('userForm').appendChild(input);
-
-        openModal();
     }
+
+    openModal(); // Open the modal
+};
 </script>

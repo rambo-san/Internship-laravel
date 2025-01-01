@@ -34,25 +34,27 @@ public function create(): View
     return view('admin.users.create');
 }
 
-public function store(Request $request): RedirectResponse
+public function store(Request $request)
 {
-    $validated = $request->validate([
-        'name' => ['required', 'string', 'max:255'],
-        'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-        'password' => ['required', 'confirmed', Password::defaults()],
-        'role' => ['required', 'in:admin,employee,client']
+    // Validate the request data
+    $validatedData = $request->validate([
+        'name' => 'required|string|max:255',
+        'email' => 'required|string|email|max:255|unique:users',
+        'password' => 'required|string|min:8|confirmed',
+        'role' => 'required|string', // Ensure role is validated
     ]);
 
+    // Create the user
     User::create([
-        'name' => $validated['name'],
-        'email' => $validated['email'],
-        'password' => Hash::make($validated['password']),
-        'role' => $validated['role']
+        'name' => $validatedData['name'],
+        'email' => $validatedData['email'],
+        'password' => bcrypt($validatedData['password']),
+        'role' => $validatedData['role'], // Make sure to save the selected role
     ]);
 
-    return redirect()->route('admin.manage-users')->with('success', 'User created successfully');
+    // Redirect to the dashboard with a success message
+    return redirect()->route('dashboard')->with('success', 'User created successfully!');
 }
-
 public function edit(User $user): View
 {
     return view('admin.users.edit', compact('user'));

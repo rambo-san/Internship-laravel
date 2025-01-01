@@ -25,6 +25,10 @@ Route::middleware('auth')->group(function () {
 
 // Admin routes
 Route::middleware(['auth', 'isAdmin'])->group(function () {
+    Route::get('/dashboard', function () {
+        $user = Auth::user();
+        return view('dashboard', ['user' => $user]);
+    })->middleware(['auth'])->name('dashboard');
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/manage-users', [AdminController::class, 'manageUsers'])->name('admin.manage-users');
     Route::get('/admin/manage-users/create', [AdminController::class, 'create'])->name('admin.users.create');
