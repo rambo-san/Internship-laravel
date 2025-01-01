@@ -4,13 +4,18 @@
         <h2 class="font-semibold text-xl text-gray-200 leading-tight">
             {{ __('Dashboard') }}
         </h2>
-        
     </x-slot>
+
     @if (session('success'))
-    <div class="bg-green-100 border border-green-400 text-green-700 p-2 mb-4 rounded">
-        {{ session('success') }}
-    </div>
-@endif
+        <div class="bg-green-100 border border-green-400 text-green-700 p-2 mb-4 rounded">
+            {{ session('success') }}
+        </div>
+    @elseif (session('error'))
+        <div class="bg-red-100 border border-red-400 text-red-700 p-2 mb-4 rounded">
+            {{ session('error') }}
+        </div>
+    @endif
+
     <div class="bg-gray-900 p-6 rounded-lg">
         <p class="text-gray-300 text-lg">
             Welcome, <strong class="text-blue-400">{{ $user->name }}</strong>
@@ -37,7 +42,6 @@
 
                     <!-- Main Content Area -->
                     <div class="w-3/4" id="admin-content">
-                        <!-- Default content or loading spinner -->
                         <div class="text-gray-300">Loading...</div>
                     </div>
                 </div>
@@ -52,14 +56,18 @@
             const links = document.querySelectorAll('.admin-link');
             const contentDiv = document.getElementById('admin-content');
 
-            // Load default content
-            loadContent('manage-users');
+            // Load default content from localStorage
+            const activeMenu = localStorage.getItem('activeMenu') || 'manage-users';
+            loadContent(activeMenu);
+            highlightActiveLink(activeMenu);
 
             links.forEach(link => {
                 link.addEventListener('click', function(e) {
                     e.preventDefault();
                     const target = this.getAttribute('data-target');
                     loadContent(target);
+                    localStorage.setItem('activeMenu', target); // Save active menu
+                    highlightActiveLink(target);
                 });
             });
 
@@ -80,6 +88,16 @@
                     });
             }
 
+            function highlightActiveLink(target) {
+                links.forEach(link => {
+                    if (link.getAttribute('data-target') === target) {
+                        link.classList.add('font-bold', 'text-blue-400');
+                    } else {
+                        link.classList.remove('font-bold', 'text-blue-400');
+                    }
+                });
+            }
+
             window.openModal = function() {
                 document.getElementById('userModal').classList.remove('hidden');
                 clearForm();
@@ -98,23 +116,23 @@
             };
 
             window.editUser = function(user) {
-            document.getElementById('user_id').value = user.id;
-            document.getElementById('name').value = user.name;
-            document.getElementById('email').value = user.email;
-            document.getElementById('role').value = user.role;
-            document.getElementById('userModalLabel').innerText = 'Edit User';
-            document.getElementById('userForm').action = '/admin/manage-users/' + user.id; // Set form action for editing
-            document.getElementById('userForm').method = 'POST'; // Set method for editing
+                document.getElementById('user_id').value = user.id;
+                document.getElementById('name').value = user.name;
+                document.getElementById('email').value = user.email;
+                document.getElementById('role').value = user.role;
+                document.getElementById('userModalLabel').innerText = 'Edit User';
+                document.getElementById('userForm').action = '/admin/manage-users/' + user.id; // Set form action for editing
+                document.getElementById('userForm').method = 'POST'; // Set method for editing
 
-            // Add method spoofing for PATCH
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = '_method';
-            input.value = 'PATCH';
-            document.getElementById('userForm').appendChild(input);
+                // Add method spoofing for PATCH
+                const input = document.createElement('input');
+                input.type = 'hidden';
+                input.name = '_method';
+                input.value = 'PATCH';
+                document.getElementById('userForm').appendChild(input);
 
-            openModal(); // Open the modal
-        };
+                openModal(); // Open the modal
+            };
         });
     </script>
 </x-app-layout>

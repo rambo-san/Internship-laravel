@@ -36,24 +36,21 @@ public function create(): View
 
 public function store(Request $request)
 {
-    // Validate the request data
-    $validatedData = $request->validate([
+    $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
         'password' => 'required|string|min:8|confirmed',
-        'role' => 'required|string', // Ensure role is validated
+        'role' => 'required|string|in:admin,employee,client', // Validate role
     ]);
 
-    // Create the user
     User::create([
-        'name' => $validatedData['name'],
-        'email' => $validatedData['email'],
-        'password' => bcrypt($validatedData['password']),
-        'role' => $validatedData['role'], // Make sure to save the selected role
+        'name' => $request->name,
+        'email' => $request->email,
+        'password' => Hash::make($request->password),
+        'role' => $request->role, // Ensure role is set
     ]);
 
-    // Redirect to the dashboard with a success message
-    return redirect()->route('dashboard')->with('success', 'User created successfully!');
+    return redirect()->route('dashboard')->with('success', 'User created successfully.');
 }
 public function edit(User $user): View
 {
@@ -70,7 +67,7 @@ public function update(Request $request, User $user): RedirectResponse
 
     $user->update($validated);
 
-    return redirect()->route('admin.manage-users')->with('success', 'User updated successfully');
+    return redirect()->route('dashboard')->with('success', 'User updated successfully');
 }
 
 public function destroy(User $user): RedirectResponse

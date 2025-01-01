@@ -77,6 +77,7 @@
             <div class="mb-4">
                 <label for="role" class="block text-sm font-medium text-gray-300">Role</label>
                 <select name="role" id="role" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
+                    <option value="">Select a role</option>
                     <option value="admin">Admin</option>
                     <option value="employee">Employee</option>
                     <option value="client">Client</option>
@@ -90,29 +91,3 @@
         </form>
     </div>
 </div>
-<script>
-    window.editUser = function(user) {
-    // Populate the modal fields with the selected user's data
-    document.getElementById('user_id').value = user.id; // Set the hidden user ID
-    document.getElementById('name').value = user.name; // Set the name
-    document.getElementById('email').value = user.email; // Set the email
-    document.getElementById('role').value = user.role; // Set the role
-    document.getElementById('userModalLabel').innerText = 'Edit User'; // Update modal title
-
-    // Update the form action to point to the update route
-    document.getElementById('userForm').action = `/admin/manage-users/${user.id}`; // Set form action for editing
-    document.getElementById('userForm').method = 'POST'; // Ensure method is POST
-
-    // Add method spoofing for PATCH
-    let input = document.querySelector('input[name="_method"]');
-    if (!input) {
-        input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = '_method';
-        input.value = 'PATCH';
-        document.getElementById('userForm').appendChild(input);
-    }
-
-    openModal(); // Open the modal
-};
-</script>
