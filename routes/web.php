@@ -6,6 +6,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\InstallerController;
+use App\Http\Middleware\CheckInstallation;
 
 // Home route
 Route::get('/', function () {
@@ -50,6 +52,10 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/admin/settings', [AdminController::class, 'updateSettings'])->name('admin.update.settings');
 });
+Route::get('/install', [InstallerController::class, 'showForm'])->name('install.form');
+
+Route::post('/install', [InstallerController::class, 'processForm'])->name('install.process');
 
 // Include authentication routes
 require __DIR__.'/auth.php';
+
