@@ -177,23 +177,32 @@
                 if (input) input.remove(); // Remove method spoofing input if exists
             };
 
+                        // Function to open modal for creating a new user
+            function openCreateUserModal() {
+                // Reset the form fields
+                document.getElementById('userForm').reset();
+                document.getElementById('user_id').value = ''; // Clear hidden user_id
+                document.getElementById('userModalLabel').innerText = 'Create User'; // Set title for creation
+                document.getElementById('userForm').action = "{{ route('admin.users.store') }}"; // Set action for creation
+                document.getElementById('userModal').classList.remove('hidden'); // Show the modal
+            }
+
+            // Function to open modal for editing an existing user
             window.editUser = function(user) {
-                document.getElementById('user_id').value = user.id;
-                document.getElementById('name').value = user.name;
-                document.getElementById('email').value = user.email;
-                document.getElementById('role').value = user.role;
+                // Set the form action to the update route
+                document.getElementById('userForm').action = `/admin/manage-users/${user.id}`; // Update URL for editing
+                document.getElementById('user_id').value = user.id; // Set hidden user_id
+
+                // Populate fields with user data
+                document.getElementById('name').value = user.name || '';
+                document.getElementById('email').value = user.email || '';
+                document.getElementById('role').value = user.role || '';
+
+                // Change modal title for editing
                 document.getElementById('userModalLabel').innerText = 'Edit User';
-                document.getElementById('userForm').action = '/admin/manage-users/' + user.id; // Set form action for editing
-                document.getElementById('userForm').method = 'POST'; // Set method for editing
-
-                // Add method spoofing for PATCH
-                const input = document.createElement('input');
-                input.type = 'hidden';
-                input.name = '_method';
-                input.value = 'PATCH';
-                document.getElementById('userForm').appendChild(input);
-
-                openModal(); // Open the modal
+                
+                // Show the modal
+                document.getElementById('userModal').classList.remove('hidden');
             };
         });
     </script>

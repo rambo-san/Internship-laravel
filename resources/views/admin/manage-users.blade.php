@@ -49,7 +49,6 @@
 </div>
 
 <!-- Modal for Create/Edit User -->
-
 <div id="userModal" class="fixed inset-0 z-50 hidden flex justify-center items-center bg-black bg-opacity-70">
     <div class="bg-gray-900 rounded-lg p-6 w-1/3">
         <h5 class="text-xl text-white mb-4" id="userModalLabel">Create User</h5>
