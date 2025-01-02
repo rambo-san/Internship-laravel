@@ -40,7 +40,10 @@ class InstallerController extends Controller
             // include INSTALL_AUTH_CODE=RAJZrPf9gAm5EzMq9OJsIQ in .env
 
             if ($request->auth_code !== env('INSTALL_AUTH_CODE')) {
-                return back()->with('error', 'Invalid authentication code.');
+                return back()->with('alert', [
+                    'type' => 'error',
+                    'message' => 'Invalid authentication code.',
+                ]);
             }
 
             // Migrate the database
@@ -57,8 +60,10 @@ class InstallerController extends Controller
             return redirect('/')->with('success', 'Installation completed. You can now log in.');
 
         } catch (\Exception $e) {
-            dd('Error Occurred: ' . $e->getMessage()); // Debug exceptions
-            return back()->with('error', 'Something went wrong, please try again.');
+            return back()->with('alert', [
+                'type' => 'error',
+                'message' => 'Something went wrong: ' . $e->getMessage(),
+            ]);
         }
     }
 
