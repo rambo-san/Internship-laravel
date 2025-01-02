@@ -1,4 +1,5 @@
 <!-- resources/views/admin/settings.blade.php -->
+<div class="ml-2">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('Admin Settings') }}
@@ -38,3 +39,4 @@
             <button type="submit" class="mt-4 bg-blue-600 text-white font-semibold py-2 px-4 rounded">Save Settings</button>
         </form>
     </div>
+</div>

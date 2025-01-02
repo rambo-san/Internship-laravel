@@ -36,6 +36,7 @@ public function create(): View
 
 public function store(Request $request)
 {
+    // Validate the incoming request data
     $request->validate([
         'name' => 'required|string|max:255',
         'email' => 'required|string|email|max:255|unique:users',
@@ -43,14 +44,21 @@ public function store(Request $request)
         'role' => 'required|string|in:admin,employee,client', // Validate role
     ]);
 
-    User::create([
-        'name' => $request->name,
-        'email' => $request->email,
-        'password' => Hash::make($request->password),
-        'role' => $request->role, // Ensure role is set
-    ]);
+    try {
+        // Attempt to create the user
+        User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+            'role' => $request->role, // Ensure role is set
+        ]);
 
-    return redirect()->route('dashboard')->with('success', 'User created successfully.');
+        return redirect()->route('dashboard')->with('success', 'User created successfully.');
+    } catch (\Exception $e) {
+        // Check if the error is due to a duplicate entry (email)
+        
+            return redirect()->route('dashboard')->with('error', 'User exist.');
+    }
 }
 public function edit(User $user): View
 {

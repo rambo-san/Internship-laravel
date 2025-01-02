@@ -1,4 +1,5 @@
 <!-- resources/views/admin/manage-users.blade.php -->
+<div class="ml-2">
 <x-slot name="header">
     <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
         {{ __('Manage Users') }}
@@ -32,7 +33,7 @@
                     <td class="border border-gray-600 p-2 text-gray-200">{{ $user->email }}</td>
                     <td class="border border-gray-600 p-2 text-gray-200">{{ $user->role }}</td>
                     <td class="border border-gray-600 p-2">
-                        <button class="text-blue-400" onclick="editUser({{ json_encode($user) }})">Edit</button>
+                        <button class="text-blue-400" onclick='editUser(@json($user))'>Edit</button>    
                         <form action="{{ route('admin.users.destroy', $user) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
@@ -48,7 +49,8 @@
 </div>
 
 <!-- Modal for Create/Edit User -->
-<div id="userModal" class="fixed inset-0 z-50 hidden justify-center items-center bg-black bg-opacity-70">
+
+<div id="userModal" class="fixed inset-0 z-50 hidden flex justify-center items-center bg-black bg-opacity-70">
     <div class="bg-gray-900 rounded-lg p-6 w-1/3">
         <h5 class="text-xl text-white mb-4" id="userModalLabel">Create User</h5>
         <form id="userForm" action="{{ route('admin.users.store') }}" method="POST">
@@ -76,7 +78,7 @@
 
             <div class="mb-4">
                 <label for="role" class="block text-sm font-medium text-gray-300">Role</label>
-                <select name="role" id="role" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
+                <select name="role" id="role" class="mt-1 p-2 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
                     <option value="">Select a role</option>
                     <option value="admin">Admin</option>
                     <option value="employee">Employee</option>
@@ -90,4 +92,5 @@
             </div>
         </form>
     </div>
+</div>
 </div>

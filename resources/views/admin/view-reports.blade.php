@@ -1,5 +1,5 @@
 <!-- resources/views/admin/view-reports.blade.php -->
-
+<div class="ml-2">
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
             {{ __('View Reports') }}
@@ -35,4 +35,5 @@
             @endforeach
         </ul>
     </div>
+</div>
 
