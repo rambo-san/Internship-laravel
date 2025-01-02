@@ -33,7 +33,7 @@
 
         @if ($user->role === 'admin')
             <div class="admin-panel mt-4">
-                <h2 class="text-2xl text-blue-400">Admin Panel</h2>
+                <h2 class="text-2xl text-blue-400 mb-2">Admin Panel</h2>
                 <div class="flex">
                     <!-- Sidebar Navigation -->
                     <div class="w-1/4 pr-4 bg-gray-800 rounded-lg p-4">
@@ -53,6 +53,58 @@
                     <!-- Main Content Area -->
                     <div class="w-3/4" id="admin-content">
                         <div class="text-gray-300">Loading...</div>
+                    </div>
+                </div>
+            </div>
+
+            @elseif ($user->role === 'employee')
+            <div class="employee-panel mt-4 text-gray-200">
+                <h2 class="text-2xl text-teal-500 mb-2">Employee Panel</h2>
+                <div class="flex">
+                    <!-- Sidebar Navigation -->
+                    <div class="w-1/4 pr-4 bg-gray-800 rounded-lg p-4 text-teal-300">
+                        <ul class="list-none pl-0">
+                            <li class="my-2">
+                                <a href="#" class="text-teal-300 hover:text-teal-400" aria-label="My Tasks">My Tasks</a>
+                            </li>
+                            <li class="my-2">
+                                <a href="#" class="text-teal-300 hover:text-teal-400" aria-label="Submit Report">Submit Report</a>
+                            </li>
+                            <li class="my-2">
+                                <a href="#" class="text-teal-300 hover:text-teal-400" aria-label="View Schedule">View Schedule</a>
+                            </li>
+                        </ul>
+                    </div>
+        
+                    <!-- Main Content Area -->
+                    <div class="w-3/4 ml-2" id="employee-content">
+                        <div class="text-gray-300">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        
+        @elseif ($user->role === 'client')
+            <div class="client-panel mt-4">
+                <h2 class="text-2xl text-yellow-400 mb-2">Client Panel</h2>
+                <div class="flex">
+                    <!-- Sidebar Navigation -->
+                    <div class="w-1/4 pr-4 bg-gray-800 rounded-lg p-4">
+                        <ul class="list-none pl-0">
+                            <li class="my-2">
+                                <a href="#" class="text-yellow-300 hover:text-yellow-400" aria-label="View Services">View Services</a>
+                            </li>
+                            <li class="my-2">
+                                <a href="#" class="text-yellow-300 hover:text-yellow-400" aria-label="Submit Feedback">Submit Feedback</a>
+                            </li>
+                            <li class="my-2">
+                                <a href="#" class="text-yellow-300 hover:text-yellow-400" aria-label="Contact Support">Contact Support</a>
+                            </li>
+                        </ul>
+                    </div>
+        
+                    <!-- Main Content Area -->
+                    <div class="w-3/4 ml-2" id="client-content">
+                        <div class="text-gray-300 p-2">Loading...</div>
                     </div>
                 </div>
             </div>

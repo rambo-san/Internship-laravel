@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
@@ -10,9 +12,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-// Authenticated dashboard route
+// Authenticated dashboard route (common for all users)
 Route::get('/dashboard', function () {
-    $user = Auth::user();
+    $user = Auth::user(); // Use the Auth facade explicitly
     return view('dashboard', ['user' => $user]);
 })->middleware(['auth'])->name('dashboard');
 
@@ -23,12 +25,20 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// Admin routes
+// Employee routes
+Route::middleware(['auth', 'isEmployee'])->group(function () {
+    Route::get('/employee/dashboard', [EmployeeController::class, 'index'])->name('employee.dashboard');
+    // Add more employee-specific routes here
+});
+
+// Client routes
+Route::middleware(['auth', 'isClient'])->group(function () {
+    Route::get('/client/dashboard', [ClientController::class, 'index'])->name('client.dashboard');
+    // Add more client-specific routes here
+});
+
+// Admin routes (only accessible by admin)
 Route::middleware(['auth', 'isAdmin'])->group(function () {
-    Route::get('/dashboard', function () {
-        $user = Auth::user();
-        return view('dashboard', ['user' => $user]);
-    })->middleware(['auth'])->name('dashboard');
     Route::get('/admin/dashboard', [AdminController::class, 'index'])->name('admin.dashboard');
     Route::get('/admin/manage-users', [AdminController::class, 'manageUsers'])->name('admin.manage-users');
     Route::get('/admin/manage-users/create', [AdminController::class, 'create'])->name('admin.users.create');
