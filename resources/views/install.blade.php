@@ -26,5 +26,12 @@
 
         <button type="submit">Install</button>
     </form>
+
+    @if(session('alert'))
+        <div class="alert alert-{{ session('alert.type') }}">
+            {{ session('alert.message') }}
+        </div>
+    @endif
+    
 </body>
 </html>
