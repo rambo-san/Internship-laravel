@@ -33,11 +33,11 @@
                     <td class="border border-gray-600 p-2 text-gray-200">{{ $user->email }}</td>
                     <td class="border border-gray-600 p-2 text-gray-200">{{ $user->role }}</td>
                     <td class="border border-gray-600 p-2">
-                        <button class="text-blue-400" onclick='editUser(@json($user))'>Edit</button>    
+                        <button class="text-blue-800 bg-yellow-400 px-3 m-1 p-1 rounded-md" onclick='editUser(@json($user))'>Edit</button>    
                         <form action="{{ route('admin.users.destroy', $user) }}" method="POST" style="display:inline;">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="text-red-400">Delete</button>
+                            <button type="submit" class="text-gray-100 bg-red-600 px-3 m-1 ml-5 p-1 rounded-md">Delete</button>
                         </form>
                     </td>
                 </tr>
