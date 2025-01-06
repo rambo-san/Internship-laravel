@@ -80,7 +80,6 @@
                 <label for="role" class="block text-sm font-medium text-gray-300">Role</label>
                 <select name="role" id="role" class="mt-1 p-2 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
                     <option value="">Select a role</option>
-                    <option value="admin">Admin</option>
                     <option value="employee">Employee</option>
                     <option value="client">Client</option>
                 </select>
