@@ -54,6 +54,7 @@
         <h5 class="text-xl text-white mb-4" id="userModalLabel">Create User</h5>
         <form id="userForm" action="{{ route('admin.users.store') }}" method="POST">
             @csrf
+            <input type="hidden" name="_method" value="POST" id="formMethod">
             <input type="hidden" name="user_id" id="user_id">
             <div class="mb-4">
                 <label for="name" class="block text-sm font-medium text-gray-300">Name</label>

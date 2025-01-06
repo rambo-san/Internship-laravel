@@ -161,8 +161,22 @@
             }
 
             window.openModal = function() {
+                const form = document.getElementById('userForm');
+                form.action = "{{ route('admin.users.store') }}";
+                
+                // Reset to POST method for new users
+                let methodInput = form.querySelector('input[name="_method"]');
+                if (methodInput) {
+                    methodInput.value = 'POST';
+                }
+                
+                // Clear all fields
+                form.reset();
+                document.getElementById('user_id').value = '';
+                document.getElementById('userModalLabel').innerText = 'Create User';
+                
+                // Show modal
                 document.getElementById('userModal').classList.remove('hidden');
-                clearForm();
             };
 
             window.closeModal = function() {
@@ -189,19 +203,33 @@
 
             // Function to open modal for editing an existing user
             window.editUser = function(user) {
-                // Set the form action to the update route
-                document.getElementById('userForm').action = `/admin/manage-users/${user.id}`; // Update URL for editing
-                document.getElementById('user_id').value = user.id; // Set hidden user_id
+                const form = document.getElementById('userForm');
+                form.action = `/admin/manage-users/${user.id}`;
+                
+                // Add method spoofing for PATCH request
+                let methodInput = form.querySelector('input[name="_method"]');
+                if (!methodInput) {
+                    methodInput = document.createElement('input');
+                    methodInput.type = 'hidden';
+                    methodInput.name = '_method';
+                    form.appendChild(methodInput);
+                }
+                methodInput.value = 'PATCH';
 
-                // Populate fields with user data
-                document.getElementById('name').value = user.name || '';
+                // Set form fields
+                document.getElementById('user_id').value = user.id;
+                document.getElementById('name').value = user.name || '' ;
                 document.getElementById('email').value = user.email || '';
                 document.getElementById('role').value = user.role || '';
+                
+                // Clear password fields
+                document.getElementById('password').value = '';
+                document.getElementById('password_confirmation').value = '';
 
-                // Change modal title for editing
+                // Update modal title
                 document.getElementById('userModalLabel').innerText = 'Edit User';
                 
-                // Show the modal
+                // Show modal
                 document.getElementById('userModal').classList.remove('hidden');
             };
         });

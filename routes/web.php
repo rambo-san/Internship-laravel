@@ -45,7 +45,7 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/manage-users', [AdminController::class, 'manageUsers'])->name('admin.manage-users');
     Route::get('/admin/manage-users/create', [AdminController::class, 'create'])->name('admin.users.create');
     Route::post('/admin/manage-users', [AdminController::class, 'store'])->name('admin.users.store');
-    Route::post('/admin/manage-users/{user}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
+    Route::get('/admin/manage-users/{user}/edit', [AdminController::class, 'edit'])->name('admin.users.edit');
     Route::patch('/admin/manage-users/{user}', [AdminController::class, 'update'])->name('admin.users.update');
     Route::delete('/admin/manage-users/{user}', [AdminController::class, 'destroy'])->name('admin.users.destroy');
     Route::get('/admin/view-reports', [AdminController::class, 'viewReports'])->name('admin.view-reports');

@@ -70,10 +70,21 @@ public function update(Request $request, User $user): RedirectResponse
     $validated = $request->validate([
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-        'role' => ['required', 'in:admin,employee,client']
+        'role' => ['required', 'in:admin,employee,client'],
+        'password' => ['nullable', 'string', 'min:8', 'confirmed']
     ]);
 
-    $user->update($validated);
+    $updateData = [
+        'name' => $validated['name'],
+        'email' => $validated['email'],
+        'role' => $validated['role']
+    ];
+
+    if ($request->filled('password')) {
+        $updateData['password'] = Hash::make($validated['password']);
+    }
+
+    $user->update($updateData);
 
     return redirect()->route('dashboard')->with('success', 'User updated successfully');
 }
