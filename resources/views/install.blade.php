@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1>Application Installation</h1>
-    <form action="{{ route('install.process') }}" method="POST">
+    <form action="/" method="POST">
         @csrf
         <label for="name">Admin Name:</label>
         <input type="text" id="name" name="name" required><br>

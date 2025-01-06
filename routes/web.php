@@ -8,11 +8,17 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\InstallerController;
 use App\Http\Middleware\CheckInstallation;
+use App\Models\User;
 
 // Home route
 Route::get('/', function () {
+    if (!User::exists()) {
+        return app(InstallerController::class)->showForm();
+    }
     return view('welcome');
 });
+
+Route::post('/', [InstallerController::class, 'processForm']);
 
 // Authenticated dashboard route (common for all users)
 Route::get('/dashboard', function () {
@@ -52,9 +58,6 @@ Route::middleware(['auth', 'isAdmin'])->group(function () {
     Route::get('/admin/settings', [AdminController::class, 'settings'])->name('admin.settings');
     Route::post('/admin/settings', [AdminController::class, 'updateSettings'])->name('admin.update.settings');
 });
-Route::get('/install', [InstallerController::class, 'showForm'])->name('install.form');
-
-Route::post('/install', [InstallerController::class, 'processForm'])->name('install.process');
 
 // Include authentication routes
 require __DIR__.'/auth.php';
