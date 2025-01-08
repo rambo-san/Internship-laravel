@@ -12,7 +12,7 @@ use App\Models\User;
 
 // Home route
 Route::get('/', function () {
-    if (!User::exists()) {
+    if (!User::where('role', 'admin')->exists()) {
         return app(InstallerController::class)->showForm();
     }
     return view('welcome');
