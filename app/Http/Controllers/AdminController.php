@@ -19,7 +19,7 @@ class AdminController extends Controller
             'total_employees' => User::where('role', 'employee')->count(),
             'total_clients' => User::where('role', 'client')->count()
         ];
-        
+
         return view('admin.dashboard', compact('stats'));
     }
 
@@ -56,7 +56,7 @@ public function store(Request $request)
         return redirect()->route('dashboard')->with('success', 'User created successfully.');
     } catch (\Exception $e) {
         // Check if the error is due to a duplicate entry (email)
-        
+
             return redirect()->route('dashboard')->with('error', 'User exist.');
     }
 }
@@ -70,9 +70,14 @@ public function update(Request $request, User $user): RedirectResponse
     $validated = $request->validate([
         'name' => ['required', 'string', 'max:255'],
         'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $user->id],
-        'role' => ['required', 'in:admin,employee,client'],
+        'role' => ['required', 'in:admin,employee,client'], // Include 'admin' to validate, but check further
         'password' => ['nullable', 'string', 'min:8', 'confirmed']
     ]);
+
+    // Prevent changing the role of an admin to something else if they are editing their own account
+    if (Auth::id() === $user->id && $user->role === 'admin' && $validated['role'] !== 'admin') {
+        return back()->with('error', 'You cannot change your role.');
+    }
 
     $updateData = [
         'name' => $validated['name'],
@@ -140,7 +145,7 @@ public function destroy(User $user): RedirectResponse
         if (!Auth::hasUser()) {
             return to_route('login');
         }
-        
+
         return view('admin.profile', ['user' => Auth::user()]);
     }
 
