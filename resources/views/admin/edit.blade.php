@@ -7,7 +7,7 @@
     <form action="{{ route('admin.users.update', $user->id) }}" method="POST">
         @csrf
         @method('PATCH')
-        
+
         <div class="mb-4">
             <label for="name" class="block text-sm font-medium text-gray-300">Name</label>
             <input type="text" name="name" id="name" value="{{ old('name', $user->name) }}" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
@@ -20,7 +20,7 @@
 
         <div class="mb-4">
             <label for="role" class="block text-sm font-medium text-gray-300">Role</label>
-            <select name="role" id="role" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md" required>
+            <select name="role" id="role" class="mt-1 block w-full border-gray-600 bg-gray-800 text-white rounded-md" >
                 <option value="admin" {{ $user->role == 'admin' ? 'selected' : '' }}>Admin</option>
                 <option value="employee" {{ $user->role == 'employee' ? 'selected' : '' }}>Employee</option>
                 <option value="client" {{ $user->role == 'client' ? 'selected' : '' }}>Client</option>

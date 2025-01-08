@@ -25,7 +25,7 @@ class AdminController extends Controller
 
     public function manageUsers(): View
 {
-    $users = User::latest()->paginate(10);
+    $users = User::orderByRaw("CASE WHEN role = 'admin' THEN 0 ELSE 1 END")->paginate(10);
     return view('admin.manage-users', compact('users'));
 }
 
