@@ -6,7 +6,7 @@
     </h2>
 </x-slot>
 
-<div class="bg-gray-800 p-6 rounded-lg shadow-md">
+<div class="bg-gray-800 p-6 rounded-lg shadow-md min-h-full">
     <h3 class="text-xl text-white mb-4">Manage Users</h3>
 
     @if (session('success'))
@@ -17,7 +17,8 @@
 
     <button class="bg-blue-600 text-white rounded px-4 py-2 mb-4" onclick="openModal()">Create New User</button>
 
-    <table class="min-w-full border-collapse border border-gray-600">
+        <div class="overflow-x-auto ">
+    <table class="min-w-max w-full border-collapse border border-gray-600 ">
         <thead>
             <tr>
                 <th class="border border-gray-600 p-2 text-left text-gray-300">Name</th>
@@ -44,7 +45,7 @@
             @endforeach
         </tbody>
     </table>
-
+    </div>
     {{ $users->links() }} <!-- For pagination -->
 </div>
 
