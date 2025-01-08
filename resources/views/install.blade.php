@@ -46,7 +46,6 @@
                 Install
             </button>
         </form>
-
         @if(session('alert'))
             <div class="mt-6 p-4 rounded-md text-center {{ session('alert.type') === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white' }}">
                 {{ session('alert.message') }}
