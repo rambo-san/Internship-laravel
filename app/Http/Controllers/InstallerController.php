@@ -11,8 +11,8 @@ class InstallerController extends Controller
 {
     public function showForm()
     {
-        //Ensure user is not already created
-        if (User::exists()) {
+        // Check if an admin user exists
+        if (User::where('role', 'admin')->exists()) {
             return redirect('/')->with('error', 'Application is already installed.');
         }
 
@@ -22,8 +22,8 @@ class InstallerController extends Controller
 
     public function processForm(Request $request)
     {
-        //Ensure user is not already created
-        if (User::exists()) {
+        // Check if an admin user exists
+        if (User::where('role', 'admin')->exists()) {
             return redirect('/')->with('error', 'Application is already installed.');
         }
 
